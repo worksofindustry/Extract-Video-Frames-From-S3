@@ -1,36 +1,10 @@
-import sys
+import boto3, pytest, sys
 sys.path.append("..") # doing this because yeah, Windows 🖕
 from get_snapshots import get_presigned_url, upload_s3, extract_frames
-import boto3, pytest
+from conftest import MyS3Client
+
 #tempfile module creates temporary files and dirs, and are automatically cleaned up
 from tempfile import NamedTemporaryFile
-
-#create mock bucket and client for testing
-@pytest.fixture
-def bucket_name():
-    return "my-test-bucket"
-
-@pytest.fixture
-def s3_test(s3_client, bucket_name):
-    s3_client.create_bucket(Bucket=bucket_name)
-    yield
-
-class MyS3Client:
-    def __init__(self, region_name="us-east-1"):
-        self.client = boto3.client("s3", region_name=region_name)
-
-    def list_buckets(self):
-        """Returns a list of bucket names."""
-        response = self.client.list_buckets()
-        return [bucket["Name"] for bucket in response["Buckets"]]
-
-    def list_objects(self, bucket_name, prefix):
-        """Returns a list all objects with specified prefix."""
-        response = self.client.list_objects(
-            Bucket=bucket_name,
-            Prefix=prefix,
-        )
-        return [object["Key"] for object in response["Contents"]]        
 
 #testing
 def test_list_objects(s3_client, s3_test) -> None:
