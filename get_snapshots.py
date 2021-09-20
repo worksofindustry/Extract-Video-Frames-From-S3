@@ -32,7 +32,7 @@ def extract_frames(frames_to_keep: List[int], url, boto_connection, bucket, s3_f
 if __name__ == "__main__":
     test = [150,2264] #list of frames to extract from the video
     s3_client = boto3.client('s3')
-    key = 'videos/2021/8B49-0782-DF75-A32B0924C3CB_4.mp4'
+    key = 'fake/videos/2021/8B49-0782-DF75-A32B0924C3CB_4.mp4'
     item_url = get_presigned_url('my-video-bucket', key, 600, s3_client)
     print(item_url)
     extract_frames(frames_to_keep=test, url=item_url, bucket='my-image-bucket', boto_connection=s3_client, s3_folder='optional')
